@@ -82,7 +82,7 @@ def main(args):
         return
 
     # Print the directions. Comment this out when you no longer need it
-    render_directions()
+    # render_directions()
 
     # Query VirusTotal for IP reputation. Feel free to discard this section or use it in a different way
     if vt_rep := fetch_vt_reputation(ip_addr,config):
@@ -97,10 +97,47 @@ VIRUS TOTAL REPUTATION DATA
 
     # Add your code here
 
+    import requests
+
+    # Set up the API endpoint and parameters
+    url = 'https://api.abuseipdb.com/api/v2/check'
+    headers = {
+        'Key': '933a69cfcbcb72c4e4ad715ee912087230aef1bc1a71dc02458632dcfafe83c8bb66dcca04012d35',
+        'Accept': 'application/json'
+    }
+    params = {
+        'ipAddress': ip_addr,
+        'maxAgeInDays': '90'
+    }
+
+    # Make the API request and retrieve the reputation score
+    response = requests.get(url, headers=headers, params=params)
+    
+    # Check for errors in the API response
+    if response.status_code != 200:
+        print(f"Error: API returned status code {response.status_code}")
+    elif 'data' not in response.json():
+        print(f"No data found for IP address {params['ipAddress']}")
+    else:
+        score = response.json()['data']['abuseConfidenceScore']
+
+        cprint(colored("""
+----------------------------
+ Abuse IPDB REPUTATION DATA
+----------------------------""",'green'))
+
+        # Determine whether to block, alert, or let the IP address pass based on its reputation score
+        if score >= 80:
+            print(f"IP address {params['ipAddress']} has a high reputation score of {score}. Blocking.")
+            # Your blocking code goes here
+        elif score >= 60:
+            print(f"IP address {params['ipAddress']} has a moderate reputation score of {score}. Alerting.")
+            # Your alerting code goes here
+        else:
+            print(f"IP address {params['ipAddress']} has a low reputation score of {score}. Letting pass.")
+            # Your letting-pass code goes here
 
 
-        
-            
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -1,0 +1,6 @@
+{
+    "vt_api_url":  "https://www.virustotal.com/api/v3",
+    "vt_api_key":  "053f64bcbcd644ec05e1050f1a87e119208fa506066b0250fdcc56aa810f3e85",
+    "ab_api_url":  "https://api.abuseipdb.com/api/v2/check",
+    "ab_api_key":  "933a69cfcbcb72c4e4ad715ee912087230aef1bc1a71dc02458632dcfafe83c8bb66dcca04012d35"
+}
